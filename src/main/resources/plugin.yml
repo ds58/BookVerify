@@ -7,3 +7,6 @@ api-version: 1.14
 
 commands:
   bookverify:
+    description: Information about this BookVerify instance
+  signbook:
+    description: Cryptographically sign a book

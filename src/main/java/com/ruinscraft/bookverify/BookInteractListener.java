@@ -6,8 +6,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerEditBookEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
@@ -15,11 +17,40 @@ import java.util.Set;
 
 public class BookInteractListener implements Listener {
 
-    private static boolean isWrittenBook(ItemStack itemStack) {
+    public static boolean isWrittenBook(ItemStack itemStack) {
         if (itemStack == null || itemStack.getType() != Material.WRITTEN_BOOK || !itemStack.hasItemMeta()) {
             return false;
         } else {
             return true;
+        }
+    }
+
+    private static void checkInventory(Inventory inventory) {
+        BookVerifyConfig bvConfig = BookVerifyAPI.getConfig();
+
+        for (ItemStack itemStack : inventory.getContents()) {
+            if (!isWrittenBook(itemStack)) {
+                continue;
+            }
+
+            BookMeta bookMeta = (BookMeta) itemStack.getItemMeta();
+            BookSignature bookSignature = BookSignatureUtil.read(bookMeta);
+
+            if (bookSignature == null) {
+                if (bvConfig.removeBookIfUnsigned) {
+                    inventory.removeItem(itemStack);
+                    continue;
+                }
+            }
+
+            Set<BookSignatureElement> changedElements = bookSignature.getChangedElements(bookMeta);
+
+            if (!changedElements.isEmpty()) {
+                if (bvConfig.removeBookIfForged) {
+                    inventory.removeItem(itemStack);
+                    continue;
+                }
+            }
         }
     }
 
@@ -32,6 +63,11 @@ public class BookInteractListener implements Listener {
             BookSignatureUtil.write(bookMeta, bookSignature);
             event.setNewBookMeta(bookMeta);
         }
+    }
+
+    @EventHandler
+    public void onInventoryOpen(InventoryOpenEvent event) {
+        checkInventory(event.getInventory());
     }
 
     @EventHandler
@@ -73,7 +109,7 @@ public class BookInteractListener implements Listener {
             }
 
             if (bvConfig.removeBookIfUnsigned) {
-                BookVerifyAPI.removeBookMeta(player, itemStack);
+                player.getInventory().removeItem(itemStack);
             }
 
             return;
@@ -99,7 +135,7 @@ public class BookInteractListener implements Listener {
             }
 
             if (bvConfig.removeBookIfForged) {
-                BookVerifyAPI.removeBookMeta(player, itemStack);
+                player.getInventory().removeItem(itemStack);
             }
         }
     }

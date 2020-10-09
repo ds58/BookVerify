@@ -3,12 +3,8 @@ package com.ruinscraft.bookverify;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BookMeta;
 
-import java.util.ArrayList;
 import java.util.Properties;
 
 public final class BookVerifyAPI {
@@ -20,7 +16,7 @@ public final class BookVerifyAPI {
         return BookVerifyPlugin.getInstance().getBvConfig();
     }
 
-    private static TextComponent getMessage(boolean warn, String key, String... replacements) {
+    public static TextComponent getMessage(boolean warn, String key, String... replacements) {
         Properties messages = BookVerifyPlugin.getInstance().getMessages();
 
         if (!messages.containsKey(key)) {
@@ -55,28 +51,6 @@ public final class BookVerifyAPI {
     public static void notifyUnsigned(Player player, ChatMessageType mType) {
         TextComponent message = getMessage(true, "NOTIFY_UNSIGNED");
         player.spigot().sendMessage(mType, message);
-    }
-
-    public static void removeBookMeta(Player player, ItemStack book) {
-        if (book == null || book.getType() != Material.WRITTEN_BOOK || !book.hasItemMeta()) {
-            return;
-        }
-
-        for (ItemStack itemStack : player.getInventory().getContents()) {
-            if (itemStack == null || itemStack.getType() != Material.WRITABLE_BOOK || !itemStack.hasItemMeta()) {
-                continue;
-            }
-
-            if (itemStack.getItemMeta().equals(book.getItemMeta())) {
-                BookMeta bookMeta = (BookMeta) itemStack.getItemMeta();
-
-                bookMeta.setTitle(null);
-                bookMeta.setAuthor(null);
-                bookMeta.setPages(new ArrayList<>());
-
-                itemStack.setItemMeta(bookMeta);
-            }
-        }
     }
 
 }

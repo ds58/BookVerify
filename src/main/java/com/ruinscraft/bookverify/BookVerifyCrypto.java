@@ -34,6 +34,10 @@ public class BookVerifyCrypto {
         }
     }
 
+    protected static String generateSecret() {
+        return UUID.randomUUID().toString().replace("-", "");
+    }
+
     public String encrypt(String data) {
         try {
             return encrypt0(data);
@@ -70,10 +74,6 @@ public class BookVerifyCrypto {
         byte[] decrDecodedData = cipher.doFinal(decodedData);
 
         return new String(decrDecodedData);
-    }
-
-    protected static String generateSecret() {
-        return UUID.randomUUID().toString().replace("-", "");
     }
 
 }
