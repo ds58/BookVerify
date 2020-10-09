@@ -10,6 +10,7 @@ public final class BookVerifyConfig {
     public boolean notifyActionBarIfForged = true;
     public boolean removeBookIfForged = false;
     public boolean removeBookIfUnsigned = false;
+    public boolean replaceForgedAuthorWithVerified = false;
     public boolean createSecretBackupsInWorldDirectories = true;
 
 }

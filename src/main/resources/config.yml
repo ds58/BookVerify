@@ -1,0 +1,37 @@
+##################################################################
+# BookVerify Configuration
+#
+# Source code: https://github.com/Ruinscraft/BookVerify
+# Issues and help: https://github.com/Ruinscraft/BookVerify/issues
+##################################################################
+
+# Alert the player in chat if the written book they've opened is definitely forged (author or content changed)
+notify-chat-if-forged: true
+
+# Alert the player in the action bar if the written book they've opened is definitely forged (author or content changed)
+notify-action-bar-if-forged: false
+
+# Alert the player in chat if the written book they've opened is validated
+notify-chat-if-ok: true
+
+# Alert the player in the action bar if the written book they've opened is validated
+notify-action-bar-if-ok: false
+
+# Alert the player in chat if the written book they've opened is unsigned (unsigned by BookVerify) and cannot be validated
+notify-chat-if-unsigned: true
+
+# Alert the player in the action bar if the written book they've opened is unsigned (unsigned by BookVerify) and cannot be validated
+notify-action-bar-if-unsigned: false
+
+# Remove a forged written book if a player interacts with it
+remove-book-if-forged: false
+
+# Remove an unsigned (unsigned by BookVerify) written book if a player interacts with it
+removed-book-if-unsigned: false
+
+# If a written book is known to have a forged author, replace it with the verified author
+replace-forged-author-with-verified: false
+
+# Create a backup of the secret key in each world directory
+# If you lose your secret key, BookVerify will not recognize previously signed books!
+create-secrete-backups-in-world-directories: true
