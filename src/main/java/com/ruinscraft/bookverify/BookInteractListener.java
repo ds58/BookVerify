@@ -26,6 +26,10 @@ public class BookInteractListener implements Listener {
     }
 
     private static void checkInventory(Inventory inventory) {
+        if (inventory == null) {
+            return;
+        }
+
         BookVerifyConfig bvConfig = BookVerifyAPI.getConfig();
 
         for (ItemStack itemStack : inventory.getContents()) {
