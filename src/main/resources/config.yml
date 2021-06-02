@@ -28,7 +28,7 @@ notify-action-bar-if-unsigned: false
 remove-book-if-forged: false
 
 # Remove an unsigned (unsigned by BookVerify) written book if a player interacts with it
-removed-book-if-unsigned: false
+remove-book-if-unsigned: false
 
 # Create a backup of the secret key in each world directory
 # If you lose your secret key, BookVerify will not recognize previously signed books!
