@@ -18,14 +18,10 @@ import java.util.Set;
 public class BookInteractListener implements Listener {
 
     public static boolean isWrittenBook(ItemStack itemStack) {
-        if (itemStack == null || itemStack.getType() != Material.WRITTEN_BOOK || !itemStack.hasItemMeta()) {
-            return false;
-        } else {
-            return true;
-        }
+        return itemStack != null && itemStack.getType() == Material.WRITTEN_BOOK && itemStack.hasItemMeta();
     }
 
-    private static void checkInventory(Inventory inventory) {
+    private static void checkInventory(Inventory inventory) throws Exception {
         if (inventory == null) {
             return;
         }
@@ -38,6 +34,7 @@ public class BookInteractListener implements Listener {
             }
 
             BookMeta bookMeta = (BookMeta) itemStack.getItemMeta();
+            assert bookMeta != null;
             BookSignature bookSignature = BookSignatureUtil.read(bookMeta);
 
             if (bookSignature == null) {
@@ -53,7 +50,6 @@ public class BookInteractListener implements Listener {
             if (!changedElements.isEmpty()) {
                 if (bvConfig.removeBookIfForged) {
                     inventory.removeItem(itemStack);
-                    continue;
                 }
             }
         }
@@ -72,7 +68,11 @@ public class BookInteractListener implements Listener {
 
     @EventHandler
     public void onInventoryOpen(InventoryOpenEvent event) {
-        checkInventory(event.getInventory());
+        try {
+            checkInventory(event.getInventory());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @EventHandler
@@ -85,11 +85,7 @@ public class BookInteractListener implements Listener {
 
         Player player = event.getPlayer();
 
-        boolean wasRightClick = false;
-
-        if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            wasRightClick = true;
-        }
+        boolean wasRightClick = event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK;
 
         if (!wasRightClick) {
             return;
@@ -102,7 +98,13 @@ public class BookInteractListener implements Listener {
         }
 
         BookVerifyConfig bvConfig = BookVerifyAPI.getConfig();
-        BookSignature bookSignature = BookSignatureUtil.read(bookMeta);
+        BookSignature bookSignature;
+        try {
+            bookSignature = BookSignatureUtil.read(bookMeta);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
 
         if (bookSignature == null) {
             if (bvConfig.notifyActionBarIfUnsigned) {
