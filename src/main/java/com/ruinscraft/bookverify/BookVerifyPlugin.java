@@ -51,7 +51,14 @@ public class BookVerifyPlugin extends JavaPlugin {
 
         // Load Crypto
         String secret = loadSecret();
-        crypto = new BookVerifyCrypto(secret);
+        try {
+            crypto = new BookVerifyCrypto(secret);
+        } catch (Exception e) {
+            e.printStackTrace();
+            getServer().getPluginManager().disablePlugin(this);
+            getLogger().warning("Unable to use encryption algorithm");
+            return;
+        }
         getLogger().info("Loaded secret key for signing written books. Do not share the contents of " + SECRET_FILE_NAME + " with anyone!");
 
         // Load messages
@@ -168,8 +175,6 @@ public class BookVerifyPlugin extends JavaPlugin {
 
         try (FileInputStream in = new FileInputStream(messagesFile)) {
             messages.load(in);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -16,12 +16,8 @@ public final class BookSignatureUtil {
     private static final Gson GSON = new Gson();
     private static final NamespacedKey KEY = new NamespacedKey(BookVerifyPlugin.getInstance(), "book-signature");
 
-    public static BookSignature read(BookMeta bookMeta) {
+    public static BookSignature read(BookMeta bookMeta) throws Exception {
         PersistentDataContainer dataContainer = bookMeta.getPersistentDataContainer();
-
-        if (dataContainer == null) {
-            return null;
-        }
 
         String encryptedData = dataContainer.get(KEY, PersistentDataType.STRING);
 

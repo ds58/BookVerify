@@ -3,11 +3,9 @@ package com.ruinscraft.bookverify;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidKeyException;
 import java.security.Key;
-import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.UUID;
 
@@ -15,23 +13,16 @@ public class BookVerifyCrypto {
 
     private static final String ENCRYPTION_ALGORITHM = "AES";
 
-    private String secret;
-    private byte[] secretBytes;
-    private Key key;
+    private final String secret;
+    private final byte[] secretBytes;
+    private final Key key;
     private Cipher cipher;
 
-    public BookVerifyCrypto(String secret) {
+    public BookVerifyCrypto(String secret) throws Exception {
         this.secret = secret;
         secretBytes = secret.getBytes();
         key = new SecretKeySpec(secretBytes, ENCRYPTION_ALGORITHM);
-
-        try {
-            cipher = Cipher.getInstance(ENCRYPTION_ALGORITHM);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        }
+        cipher = Cipher.getInstance(ENCRYPTION_ALGORITHM);
     }
 
     protected static String generateSecret() {
