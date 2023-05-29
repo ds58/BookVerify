@@ -1,0 +1,9 @@
+name: ${name}
+version: ${version}
+main: ${mainClass}
+author: royalkingkb
+description: Sign written books cryptographically to prevent forgery
+api-version: 1.14
+
+commands:
+  bookverify:
