@@ -30,7 +30,8 @@ public final class BookSignatureUtil {
     }
 
     public static String getContentHash(BookMeta bookMeta) {
-        String jsonBookContent = GSON.toJson(bookMeta.getPages(), new TypeToken<List<String>>() {}.getType());
+        String jsonBookContent = GSON.toJson(bookMeta.getPages(), new TypeToken<List<String>>() {
+        }.getType());
         HashCode hash = Hashing.md5().hashBytes(jsonBookContent.getBytes());
         return hash.toString();
     }

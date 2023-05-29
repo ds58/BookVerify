@@ -62,6 +62,7 @@ public class BookVerifyPlugin extends JavaPlugin {
 
         // Register commands
         getCommand("bookverify").setExecutor(new BookVerifyCommandExecutor());
+        getCommand("signbook").setExecutor(new SignBookCommandExecutor());
     }
 
     @Override
@@ -153,7 +154,6 @@ public class BookVerifyPlugin extends JavaPlugin {
         bvConfig.notifyActionBarIfForged = getConfig().getBoolean("notify-action-bar-if-forged", bvConfig.notifyActionBarIfForged);
         bvConfig.removeBookIfForged = getConfig().getBoolean("remove-book-if-forged", bvConfig.removeBookIfForged);
         bvConfig.removeBookIfUnsigned = getConfig().getBoolean("remove-book-if-unsigned", bvConfig.removeBookIfUnsigned);
-        bvConfig.replaceForgedAuthorWithVerified = getConfig().getBoolean("replace-forged-author-with-verified", bvConfig.replaceForgedAuthorWithVerified);
         bvConfig.createSecretBackupsInWorldDirectories = getConfig().getBoolean("create-secret-backups-in-world-directories", bvConfig.createSecretBackupsInWorldDirectories);
     }
 

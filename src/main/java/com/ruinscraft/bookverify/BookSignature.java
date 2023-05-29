@@ -32,12 +32,20 @@ public class BookSignature {
         this.signTime = signTime;
     }
 
+    public static BookSignature decodeJson(String json) {
+        return GSON.fromJson(json, BookSignature.class);
+    }
+
     public String getTitle() {
         return title;
     }
 
     public String getAuthor() {
         return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     public String getContentHash() {
@@ -78,10 +86,6 @@ public class BookSignature {
     @Override
     public String toString() {
         return String.format("Title: %s, Author: %s, Date: %s", title, author, getSignDateHuman());
-    }
-
-    public static BookSignature decodeJson(String json) {
-        return GSON.fromJson(json, BookSignature.class);
     }
 
 }
