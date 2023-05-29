@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.List;
@@ -16,11 +17,20 @@ public final class BookSignatureUtil {
     private static final NamespacedKey KEY = new NamespacedKey(BookVerifyPlugin.getInstance(), "book-signature");
 
     public static BookSignature read(BookMeta bookMeta) {
-        String encryptedData = bookMeta.getPersistentDataContainer().get(KEY, PersistentDataType.STRING);
+        PersistentDataContainer dataContainer = bookMeta.getPersistentDataContainer();
+
+        if (dataContainer == null) {
+            return null;
+        }
+
+        String encryptedData = dataContainer.get(KEY, PersistentDataType.STRING);
+
         if (encryptedData == null) {
             return null;
         }
+
         String data = BookVerifyPlugin.getInstance().getCrypto().decrypt(encryptedData);
+
         return BookSignature.decodeJson(data);
     }
 
