@@ -43,8 +43,9 @@ public class BookInteractListener implements Listener {
             if (bookSignature == null) {
                 if (bvConfig.removeBookIfUnsigned) {
                     inventory.removeItem(itemStack);
-                    continue;
                 }
+
+                continue;
             }
 
             Set<BookSignatureElement> changedElements = bookSignature.getChangedElements(bookMeta);
