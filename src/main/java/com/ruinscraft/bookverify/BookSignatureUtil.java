@@ -16,12 +16,17 @@ public final class BookSignatureUtil {
     private static final NamespacedKey KEY = new NamespacedKey(BookVerifyPlugin.getInstance(), "book-signature");
 
     public static BookSignature read(BookMeta bookMeta) {
-        String data = bookMeta.getPersistentDataContainer().get(KEY, PersistentDataType.STRING);
+        String encryptedData = bookMeta.getPersistentDataContainer().get(KEY, PersistentDataType.STRING);
+        if (encryptedData == null) {
+            return null;
+        }
+        String data = BookVerifyPlugin.getInstance().getCrypto().decrypt(encryptedData);
         return BookSignature.decodeJson(data);
     }
 
     public static void write(BookMeta bookMeta, BookSignature signature) {
-        bookMeta.getPersistentDataContainer().set(KEY, PersistentDataType.STRING, signature.encodeJson());
+        String encryptedData = BookVerifyPlugin.getInstance().getCrypto().encrypt(signature.encodeJson());
+        bookMeta.getPersistentDataContainer().set(KEY, PersistentDataType.STRING, encryptedData);
     }
 
     public static String getContentHash(BookMeta bookMeta) {

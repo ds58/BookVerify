@@ -28,6 +28,10 @@ public class BookVerifyPlugin extends JavaPlugin {
         return crypto;
     }
 
+    public Properties getMessages() {
+        return messages;
+    }
+
     @Override
     public void onEnable() {
         instance = this;
@@ -41,13 +45,14 @@ public class BookVerifyPlugin extends JavaPlugin {
             return;
         }
 
+        // Load config
+        saveDefaultConfig();
+        loadConfig();
+
         // Load Crypto
         String secret = loadSecret();
         crypto = new BookVerifyCrypto(secret);
         getLogger().info("Loaded secret key for signing written books. Do not share the contents of " + SECRET_FILE_NAME + " with anyone!");
-
-        // Load config
-        loadConfig();
 
         // Load messages
         loadMessages();
@@ -140,7 +145,16 @@ public class BookVerifyPlugin extends JavaPlugin {
     private void loadConfig() {
         bvConfig = new BookVerifyConfig();
 
-
+        bvConfig.notifyChatIfOk = getConfig().getBoolean("notify-chat-if-ok", bvConfig.notifyChatIfOk);
+        bvConfig.notifyActionBarIfOk = getConfig().getBoolean("notify-action-bar-if-ok", bvConfig.notifyActionBarIfOk);
+        bvConfig.notifyChatIfUnsigned = getConfig().getBoolean("notify-chat-if-unsigned", bvConfig.notifyChatIfUnsigned);
+        bvConfig.notifyActionBarIfUnsigned = getConfig().getBoolean("notify-action-bar-if-unsigned", bvConfig.notifyActionBarIfUnsigned);
+        bvConfig.notifyChatIfForged = getConfig().getBoolean("notify-chat-if-forged", bvConfig.notifyChatIfForged);
+        bvConfig.notifyActionBarIfForged = getConfig().getBoolean("notify-action-bar-if-forged", bvConfig.notifyActionBarIfForged);
+        bvConfig.removeBookIfForged = getConfig().getBoolean("remove-book-if-forged", bvConfig.removeBookIfForged);
+        bvConfig.removeBookIfUnsigned = getConfig().getBoolean("remove-book-if-unsigned", bvConfig.removeBookIfUnsigned);
+        bvConfig.replaceForgedAuthorWithVerified = getConfig().getBoolean("replace-forged-author-with-verified", bvConfig.replaceForgedAuthorWithVerified);
+        bvConfig.createSecretBackupsInWorldDirectories = getConfig().getBoolean("create-secret-backups-in-world-directories", bvConfig.createSecretBackupsInWorldDirectories);
     }
 
     private void loadMessages() {
