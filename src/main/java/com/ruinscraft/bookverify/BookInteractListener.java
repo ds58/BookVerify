@@ -117,6 +117,7 @@ public class BookInteractListener implements Listener {
 
             if (bvConfig.removeBookIfUnsigned) {
                 player.getInventory().removeItem(itemStack);
+                event.setCancelled(true);
             }
 
             return;
@@ -143,6 +144,7 @@ public class BookInteractListener implements Listener {
 
             if (bvConfig.removeBookIfForged) {
                 player.getInventory().removeItem(itemStack);
+                event.setCancelled(true);
             }
         }
     }
